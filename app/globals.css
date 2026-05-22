@@ -43,3 +43,11 @@ svg.logo {
 .form-title {
   @apply text-center text-xl font-bold;
 }
+
+/* generic button styles */
+.btn {
+  @apply inline-block px-4 py-2 rounded-md font-medium text-heading bg-primary transition-colors;
+}
+.btn:hover {
+  @apply bg-secondary;
+}

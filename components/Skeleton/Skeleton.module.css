@@ -1,0 +1,54 @@
+@reference "../../app/globals.css";
+
+.skeleton {
+  @apply bg-light rounded-2xl p-8 w-full;
+}
+
+.header {
+  @apply flex items-center gap-6 mb-8;
+}
+
+.avatar {
+  @apply w-24 h-24 rounded-full bg-lighter shrink-0;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.headerLines {
+  @apply flex flex-col gap-3 flex-1;
+}
+
+.lineLong {
+  @apply h-4 rounded bg-lighter;
+  width: 70%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.lineMedium {
+  @apply h-4 rounded bg-lighter;
+  width: 55%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.body {
+  @apply flex flex-col gap-3;
+}
+
+.lineFull {
+  @apply h-4 rounded bg-lighter w-full;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+.lineShort {
+  @apply h-4 rounded bg-lighter;
+  width: 60%;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}

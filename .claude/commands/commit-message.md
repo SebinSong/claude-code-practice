@@ -1,6 +1,7 @@
 ---
 description: Create a commit messsage by analyzing git diffs
 allowed-tools: Bash(git status:*), Bash(git add .), Bash(git diff --staged), Bash(git commit:*)
+argument-hint: [Specify --force for auto-commiting]
 ---
 
 # Context:
@@ -37,6 +38,7 @@ Use the following format for making the commit message:
 1. Show summary of changes currently staged
 2. Propose commit message
 3. Ask for confirmation before committing
+4. IMPORTANT: if '--force' is specified as an argument to the command, skip the step 2., 3. and go head with commiting.
 
 DO NOT auto-commit - wait for user approval, and only commit if the user says so.
 

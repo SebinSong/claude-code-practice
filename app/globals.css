@@ -51,3 +51,27 @@ svg.logo {
 .btn:hover {
   @apply bg-secondary;
 }
+
+/* splash tagline */
+.tagline {
+  @apply inline-block text-xl font-semibold mb-4 cursor-default;
+  color: var(--color-primary);
+  transition: color 300ms ease, transform 300ms ease;
+}
+.tagline:hover {
+  @apply scale-105;
+  color: var(--color-secondary);
+}
+
+@supports (-webkit-background-clip: text) or (background-clip: text) {
+  .tagline {
+    background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .tagline:hover {
+    background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+    color: transparent;
+  }
+}

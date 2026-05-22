@@ -11,7 +11,7 @@ export default function Home() {
         <h1 className="mb-6">
           P<Clock8 className="logo" strokeWidth={2.75} />cket Heist
         </h1>
-        <div>Tiny missions. Big office mischief.</div>
+        <div className="tagline">Clock&apos;s ticking. Pull the heist.</div>
         <p>
           Turn the dull bits of the workday into a{" "}
           <span className="text-primary font-semibold">caper</span>. Assign tiny,

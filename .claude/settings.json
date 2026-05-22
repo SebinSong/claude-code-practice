@@ -5,5 +5,18 @@
       "Bash(git *)"
     ],
     "ask": []
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Hello, World!'"
+          }
+        ]
+      }
+    ]
   }
 }

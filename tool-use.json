@@ -1,0 +1,45 @@
+{
+  "session_id": "4a415311-0285-41b8-b9c9-cdf5bc46e163",
+  "transcript_path": "/Users/macbook/.claude/projects/-Users-macbook-Desktop-Web-study-claude-code-pocket-heist/4a415311-0285-41b8-b9c9-cdf5bc46e163.jsonl",
+  "cwd": "/Users/macbook/Desktop/Web/study/claude-code/pocket-heist",
+  "permission_mode": "acceptEdits",
+  "effort": {
+    "level": "xhigh"
+  },
+  "hook_event_name": "PostToolUse",
+  "tool_name": "Edit",
+  "tool_input": {
+    "file_path": "/Users/macbook/Desktop/Web/study/claude-code/pocket-heist/app/(public)/login/page.tsx",
+    "old_string": "<h2 className=\"form-title\">Log in to Your Account</h2>",
+    "new_string": "<h1 className=\"form-title\">Log in to Your Account</h1>",
+    "replace_all": false
+  },
+  "tool_response": {
+    "filePath": "/Users/macbook/Desktop/Web/study/claude-code/pocket-heist/app/(public)/login/page.tsx",
+    "oldString": "<h2 className=\"form-title\">Log in to Your Account</h2>",
+    "newString": "<h1 className=\"form-title\">Log in to Your Account</h1>",
+    "originalFile": "export default function SignupPage() {\n  return (\n    <div className=\"center-content\">\n      <div className=\"page-content\">\n        <h2 className=\"form-title\">Log in to Your Account</h2>\n      </div>\n    </div>\n  )\n}",
+    "structuredPatch": [
+      {
+        "oldStart": 2,
+        "oldLines": 7,
+        "newStart": 2,
+        "newLines": 7,
+        "lines": [
+          "   return (",
+          "     <div className=\"center-content\">",
+          "       <div className=\"page-content\">",
+          "-        <h2 className=\"form-title\">Log in to Your Account</h2>",
+          "+        <h1 className=\"form-title\">Log in to Your Account</h1>",
+          "       </div>",
+          "     </div>",
+          "   )"
+        ]
+      }
+    ],
+    "userModified": false,
+    "replaceAll": false
+  },
+  "tool_use_id": "toolu_01N292YPfQ4DvbVj9t4158mz",
+  "duration_ms": 64
+}

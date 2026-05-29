@@ -40,7 +40,11 @@ svg.logo {
 .center-content {
   @apply flex flex-col justify-center text-justify min-h-lvh;
 }
-.form-title {
+.form-content {
+  @apply my-4 mx-auto w-full max-w-sm px-4;
+}
+h1.form-title,
+h2.form-title {
   @apply text-center text-xl font-bold;
 }
 

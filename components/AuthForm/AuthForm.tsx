@@ -1,0 +1,99 @@
+"use client"
+
+import Link from "next/link"
+import { Eye, EyeOff } from "lucide-react"
+import { useState } from "react"
+import styles from "./AuthForm.module.css"
+
+type AuthVariant = "login" | "signup"
+
+type AuthFormProps = {
+  variant: AuthVariant
+}
+
+const VARIANT_CONFIG = {
+  login: {
+    submitLabel: "Log in",
+    consoleLabel: "login submit",
+    passwordAutoComplete: "current-password",
+    passwordMinLength: undefined,
+    switchHref: "/signup",
+    switchPrompt: "Don't have an account?",
+    switchCta: "Sign up",
+  },
+  signup: {
+    submitLabel: "Sign up",
+    consoleLabel: "signup submit",
+    passwordAutoComplete: "new-password",
+    passwordMinLength: 6,
+    switchHref: "/login",
+    switchPrompt: "Already have an account?",
+    switchCta: "Log in",
+  },
+} as const
+
+export default function AuthForm({ variant }: AuthFormProps) {
+  const config = VARIANT_CONFIG[variant]
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+
+  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault()
+    console.log(config.consoleLabel, { email, password })
+  }
+
+  return (
+    <form className={styles.form} onSubmit={handleSubmit}>
+      <label className={styles.field}>
+        <span className={styles.label}>Email</span>
+        <input
+          className={styles.input}
+          type="email"
+          required
+          autoComplete="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+      </label>
+
+      <label className={styles.field}>
+        <span className={styles.label}>Password</span>
+        <div className={styles.passwordField}>
+          <input
+            className={`${styles.input} ${styles.passwordInput}`}
+            type={showPassword ? "text" : "password"}
+            required
+            minLength={config.passwordMinLength}
+            autoComplete={config.passwordAutoComplete}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <button
+            type="button"
+            className={styles.toggle}
+            aria-label={showPassword ? "Hide password" : "Show password"}
+            onClick={() => setShowPassword((s) => !s)}
+          >
+            {showPassword ? <EyeOff aria-hidden /> : <Eye aria-hidden />}
+          </button>
+        </div>
+      </label>
+
+      <button
+        type="submit"
+        className={`btn ${styles.submit}`}
+        disabled={!email || !password}
+      >
+        {config.submitLabel}
+      </button>
+
+      <p className={styles.switchRow}>
+        {config.switchPrompt}{" "}
+        <Link className={styles.switchLink} href={config.switchHref}>
+          {config.switchCta}
+        </Link>
+      </p>
+    </form>
+  )
+}

@@ -7,12 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ```bash
 npm run dev      # Next.js dev server at http://localhost:3030
 npm run build    # production build
-npm run start    # serve the production build
 npm run lint     # ESLint (eslint-config-next, core-web-vitals + typescript)
 npm test         # Vitest in watch mode
 ```
 
-Run a single test file or a single test name:
+Run a single test file or match a test name:
 
 ```bash
 npx vitest run tests/components/Navbar.test.tsx
@@ -40,7 +39,7 @@ When adding a new page, choose the group based on whether it needs the navbar/au
 To add a brand color or font, extend the `@theme` block — do **not** create a `tailwind.config.js`. Use these theme utilities instead of raw hex values so accents stay on-brand.
 
 ### CSS Modules import theme tokens via `@reference`
-Component-scoped styles live next to the component (e.g. `components/Navbar/Navbar.module.css`) and start with `@reference "../../app/globals.css";`. That directive lets the module's `@apply` reach the theme tokens declared in `globals.css` without re-importing Tailwind itself. New CSS modules must include the same `@reference` line (with the correct relative path) or `@apply` calls referencing theme utilities will fail to compile.
+Component-scoped styles live next to the component (e.g. `components/Navbar/Navbar.module.css`) and start with `@reference "../../app/globals.css";`. That directive lets the module's `@apply` reach the theme tokens without re-importing Tailwind itself. New CSS modules must include the same `@reference` line (with the correct relative path) or `@apply` calls referencing theme utilities will fail to compile.
 
 ### Component folder convention
 Each component is its own folder under `components/` with a barrel `index.ts` re-exporting the default. Tests mirror this structure under `tests/components/`. Import via the folder (`import Navbar from "@/components/Navbar"`), not the inner file.
@@ -48,9 +47,18 @@ Each component is its own folder under `components/` with a barrel `index.ts` re
 ### Path alias
 `@/*` resolves to the project root (`tsconfig.json` → `paths`). It works in both Next.js builds and Vitest.
 
-### Additional coding preferences
+## Hooks
 
-- Do NOT use semicolons for Javascript or TypeScript code.
-- Do NOT apply tailwind classes directly in component templates unless essential or just 1 at most. If an element needs more than a single tailwind class, combine them to a custom class using the `@apply` directive.
-- Use minimal proejct dependencies where possible.
-- Use the `git switch -c` command to switch to new branches, not `git checkout`
+A `PostToolUse` hook in `.claude/settings.json` runs `prettier --write` on any `.ts`/`.tsx` file after every `Write` or `Edit` tool call. Prettier is configured via `.prettierrc` (`semi: false`). This means the file on disk may differ slightly from what was written (e.g. quote normalisation, trailing newline) — always treat the post-hook file state as canonical.
+
+## Coding preferences
+
+- Do NOT use semicolons in JavaScript or TypeScript code.
+- Do NOT stack more than one Tailwind utility directly on a template element. If an element needs multiple utilities, combine them into a class with `@apply` in the CSS module.
+- Minimise project dependencies — prefer existing packages (`lucide-react` is already available for icons) over adding new ones.
+- Use `git switch -c` to create branches, not `git checkout -b`.
+- For interactive component tests (click, type, keyboard), use `@testing-library/user-event` (`userEvent.setup()`) rather than `fireEvent` — it simulates real browser input more accurately.
+
+## Checking Documentation
+
+-- **important:** When implementing any library/framework-specific features, ALWAYS check the appropreate library/framework documentation using the Context7 MCP server before writing any code.

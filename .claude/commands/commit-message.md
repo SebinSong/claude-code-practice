@@ -37,7 +37,7 @@ Use the following format for making the commit message:
 
 1. Show summary of changes currently staged
 2. Propose commit message
-3. Ask for confirmation before committing
+3. Ask for confirmation before committing (Always prompt 'yes/no' question)
 4. IMPORTANT: if '--force' is specified as an argument to the command, skip the step 2., 3. and go head with commiting. Also ensure to print out the commit-message used.
 
 DO NOT auto-commit - wait for user approval, and only commit if the user says so.

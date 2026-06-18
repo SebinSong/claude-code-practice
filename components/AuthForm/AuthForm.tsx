@@ -51,6 +51,7 @@ export default function AuthForm({ variant }: AuthFormProps) {
           className={styles.input}
           type="email"
           required
+          placeholder="Enter your email"
           autoComplete="email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -64,6 +65,7 @@ export default function AuthForm({ variant }: AuthFormProps) {
             className={`${styles.input} ${styles.passwordInput}`}
             type={showPassword ? "text" : "password"}
             required
+            placeholder="Enter your password"
             minLength={config.passwordMinLength}
             autoComplete={config.passwordAutoComplete}
             value={password}

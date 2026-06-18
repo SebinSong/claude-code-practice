@@ -45,7 +45,7 @@ From `$ARGUMENTS`, extract:
   - Format: `claude/feature/<feature_slug>`
   - Example: `claude/feature/card-component`
 
-If you cannot inter a sensible `feature_title` and `feature_slug`, ask the user to clarify instead of guessing.
+If you cannot infer a sensible `feature_title` and `feature_slug`, ask the user to clarify instead of guessing.
 
 ## Step 3. Switch to a new Git branch
 

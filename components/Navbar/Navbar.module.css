@@ -15,3 +15,11 @@
 svg.logo {
   display: inline-block;
 }
+
+.createBtn {
+  @apply inline-flex items-center gap-2 px-4 py-2 rounded-[10px] font-semibold text-heading transition-all;
+  background: linear-gradient(90deg, #9810fa 0%, #e60076 100%);
+}
+.createBtn:hover {
+  background: linear-gradient(90deg, #e60076 0%, #9810fa 100%);
+}

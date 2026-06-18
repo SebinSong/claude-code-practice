@@ -76,6 +76,8 @@ h2.form-title {
   }
   .tagline:hover {
     background: linear-gradient(135deg, var(--color-secondary), var(--color-primary));
+    -webkit-background-clip: text;
+    background-clip: text;
     color: transparent;
   }
 }

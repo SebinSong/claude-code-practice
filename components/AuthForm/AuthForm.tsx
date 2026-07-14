@@ -1,8 +1,10 @@
 "use client"
 
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
+import { signUpWithCodename, authErrorMessage } from "@/lib/auth"
 import styles from "./AuthForm.module.css"
 
 type AuthVariant = "login" | "signup"
@@ -34,13 +36,33 @@ const VARIANT_CONFIG = {
 
 export default function AuthForm({ variant }: AuthFormProps) {
   const config = VARIANT_CONFIG[variant]
+  const router = useRouter()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
+  const [error, setError] = useState("")
+  const [submitting, setSubmitting] = useState(false)
 
-  function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
-    console.log(config.consoleLabel, { email, password })
+
+    if (variant !== "signup") {
+      // Login wiring is out of scope — keep the existing placeholder behaviour.
+      console.log(config.consoleLabel, { email, password })
+      return
+    }
+
+    setError("")
+    setSubmitting(true)
+    try {
+      const res = await signUpWithCodename(email, password)
+      console.log("signup success", res)
+      router.push("/heists")
+    } catch (err) {
+      setError(authErrorMessage(err))
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -82,12 +104,22 @@ export default function AuthForm({ variant }: AuthFormProps) {
         </div>
       </label>
 
+      {error && (
+        <p className={styles.error} role="alert">
+          {error}
+        </p>
+      )}
+
       <button
         type="submit"
         className={`btn ${styles.submit}`}
-        disabled={!email || !password}
+        disabled={!email || !password || submitting}
       >
-        {config.submitLabel}
+        {submitting ? (
+          <span className={styles.spinner} aria-hidden />
+        ) : (
+          config.submitLabel
+        )}
       </button>
 
       <p className={styles.switchRow}>

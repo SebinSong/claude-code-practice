@@ -1,11 +1,32 @@
 import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
-import { describe, it, expect, vi, afterEach } from "vitest"
+import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
+
+// vi.mock is hoisted, so shared mock fns are declared via vi.hoisted.
+const mocks = vi.hoisted(() => ({
+  push: vi.fn(),
+  signUpWithCodename: vi.fn(),
+  authErrorMessage: vi.fn(() => "An account with this email already exists."),
+}))
+
+vi.mock("next/navigation", () => ({
+  useRouter: () => ({ push: mocks.push }),
+}))
+
+vi.mock("@/lib/auth", () => ({
+  signUpWithCodename: mocks.signUpWithCodename,
+  authErrorMessage: mocks.authErrorMessage,
+}))
 
 // component imports
 import AuthForm from "@/components/AuthForm"
 
 describe("AuthForm", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+    mocks.signUpWithCodename.mockResolvedValue({})
+  })
+
   afterEach(() => {
     vi.restoreAllMocks()
   })
@@ -58,7 +79,7 @@ describe("AuthForm", () => {
     ).toBeInTheDocument()
   })
 
-  it("logs the login payload once on submit", async () => {
+  it("logs the login payload once on submit without touching signup", async () => {
     const user = userEvent.setup()
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {})
     render(<AuthForm variant="login" />)
@@ -75,11 +96,13 @@ describe("AuthForm", () => {
       email: "thief@heist.io",
       password: "secret123",
     })
+    // Login must not trigger the Firebase signup flow.
+    expect(mocks.signUpWithCodename).not.toHaveBeenCalled()
+    expect(mocks.push).not.toHaveBeenCalled()
   })
 
-  it("logs the signup payload with the signup label", async () => {
+  it("signs up and redirects to /heists on success", async () => {
     const user = userEvent.setup()
-    const logSpy = vi.spyOn(console, "log").mockImplementation(() => {})
     render(<AuthForm variant="signup" />)
 
     await user.type(
@@ -89,14 +112,35 @@ describe("AuthForm", () => {
     await user.type(screen.getByLabelText(/^password$/i), "secret123")
     await user.click(screen.getByRole("button", { name: /sign up/i }))
 
-    expect(logSpy).toHaveBeenCalledTimes(1)
-    expect(logSpy).toHaveBeenCalledWith("signup submit", {
-      email: "new@heist.io",
-      password: "secret123",
-    })
+    expect(mocks.signUpWithCodename).toHaveBeenCalledTimes(1)
+    expect(mocks.signUpWithCodename).toHaveBeenCalledWith(
+      "new@heist.io",
+      "secret123",
+    )
+    expect(mocks.push).toHaveBeenCalledWith("/heists")
   })
 
-  it("does not log when the form is submitted empty", async () => {
+  it("shows an error and does not redirect when signup fails", async () => {
+    const user = userEvent.setup()
+    mocks.signUpWithCodename.mockRejectedValue({
+      code: "auth/email-already-in-use",
+    })
+    render(<AuthForm variant="signup" />)
+
+    await user.type(
+      screen.getByRole("textbox", { name: /email/i }),
+      "taken@heist.io",
+    )
+    await user.type(screen.getByLabelText(/^password$/i), "secret123")
+    await user.click(screen.getByRole("button", { name: /sign up/i }))
+
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      /already exists/i,
+    )
+    expect(mocks.push).not.toHaveBeenCalled()
+  })
+
+  it("does not submit when the form is empty", async () => {
     const user = userEvent.setup()
     const logSpy = vi.spyOn(console, "log").mockImplementation(() => {})
     render(<AuthForm variant="login" />)
@@ -104,6 +148,7 @@ describe("AuthForm", () => {
     await user.click(screen.getByRole("button", { name: /log in/i }))
 
     expect(logSpy).not.toHaveBeenCalled()
+    expect(mocks.signUpWithCodename).not.toHaveBeenCalled()
   })
 
   it("links to the opposite route from each variant", () => {

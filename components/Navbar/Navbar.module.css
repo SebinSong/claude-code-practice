@@ -23,3 +23,14 @@ svg.logo {
 .createBtn:hover {
   background: linear-gradient(90deg, #e60076 0%, #9810fa 100%);
 }
+
+.siteNav ul {
+  @apply flex items-center gap-3;
+}
+
+.logoutBtn {
+  @apply inline-flex items-center gap-2;
+}
+.logoutBtn:disabled {
+  @apply opacity-50 cursor-not-allowed;
+}

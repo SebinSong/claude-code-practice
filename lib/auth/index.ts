@@ -1,4 +1,8 @@
-import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth"
+import {
+  createUserWithEmailAndPassword,
+  signOut,
+  updateProfile,
+} from "firebase/auth"
 import { doc, setDoc, serverTimestamp } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase"
 import { generateCodename } from "@/lib/utilities"
@@ -24,6 +28,11 @@ export async function signUpWithCodename(email: string, password: string) {
   }
 
   return { user, codename }
+}
+
+// End the current session. Errors propagate to the caller.
+export async function signOutUser() {
+  await signOut(auth)
 }
 
 const ERROR_MESSAGES: Record<string, string> = {

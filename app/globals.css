@@ -55,6 +55,28 @@ h2.form-title {
 .btn:hover {
   @apply bg-secondary;
 }
+.btn.secondary {
+  @apply bg-transparent border border-secondary text-secondary;
+}
+.btn.secondary:hover,
+.btn.secondary:focus-visible {
+  @apply bg-secondary/10 text-secondary border-secondary;
+  outline: none;
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.35);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
 
 /* splash tagline */
 .tagline {

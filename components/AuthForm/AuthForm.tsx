@@ -116,7 +116,7 @@ export default function AuthForm({ variant }: AuthFormProps) {
         disabled={!email || !password || submitting}
       >
         {submitting ? (
-          <span className={styles.spinner} aria-hidden />
+          <span className="spinner" aria-hidden />
         ) : (
           config.submitLabel
         )}

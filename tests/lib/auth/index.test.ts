@@ -4,6 +4,7 @@ import { describe, it, expect, vi, beforeEach } from "vitest"
 const mocks = vi.hoisted(() => ({
   createUser: vi.fn(),
   updateProfile: vi.fn(),
+  signOut: vi.fn(),
   setDoc: vi.fn(),
   doc: vi.fn((_db, ...path: string[]) => ({ path: path.join("/") })),
   serverTimestamp: vi.fn(() => "SERVER_TIMESTAMP"),
@@ -12,6 +13,7 @@ const mocks = vi.hoisted(() => ({
 vi.mock("firebase/auth", () => ({
   createUserWithEmailAndPassword: mocks.createUser,
   updateProfile: mocks.updateProfile,
+  signOut: mocks.signOut,
 }))
 
 vi.mock("firebase/firestore", () => ({
@@ -23,7 +25,7 @@ vi.mock("firebase/firestore", () => ({
 vi.mock("@/lib/firebase", () => ({ auth: {}, db: {} }))
 
 // module imports
-import { signUpWithCodename, authErrorMessage } from "@/lib/auth"
+import { signUpWithCodename, signOutUser, authErrorMessage } from "@/lib/auth"
 
 describe("signUpWithCodename", () => {
   beforeEach(() => {
@@ -70,6 +72,26 @@ describe("signUpWithCodename", () => {
     ).rejects.toMatchObject({ code: "auth/email-already-in-use" })
 
     expect(mocks.setDoc).not.toHaveBeenCalled()
+  })
+})
+
+describe("signOutUser", () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
+  it("calls firebase signOut", async () => {
+    mocks.signOut.mockResolvedValue(undefined)
+
+    await signOutUser()
+
+    expect(mocks.signOut).toHaveBeenCalledWith({})
+  })
+
+  it("propagates errors to the caller", async () => {
+    mocks.signOut.mockRejectedValue(new Error("network error"))
+
+    await expect(signOutUser()).rejects.toThrow("network error")
   })
 })
 

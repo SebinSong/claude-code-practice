@@ -1,9 +1,10 @@
 import {
   createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
   signOut,
   updateProfile,
 } from "firebase/auth"
-import { doc, setDoc, serverTimestamp } from "firebase/firestore"
+import { doc, setDoc, updateDoc, serverTimestamp } from "firebase/firestore"
 import { auth, db } from "@/lib/firebase"
 import { generateCodename } from "@/lib/utilities"
 
@@ -30,6 +31,23 @@ export async function signUpWithCodename(email: string, password: string) {
   return { user, codename }
 }
 
+// Sign in with an existing account. Errors propagate to the caller.
+export async function signInUser(email: string, password: string) {
+  const { user } = await signInWithEmailAndPassword(auth, email, password)
+
+  // The user is already signed in at this point, so don't fail the login if
+  // this write errors — just log it for now.
+  try {
+    await updateDoc(doc(db, "users", user.uid), {
+      lastLoggedIn: serverTimestamp(),
+    })
+  } catch (error) {
+    console.error("Failed to update lastLoggedIn", error)
+  }
+
+  return { user }
+}
+
 // End the current session. Errors propagate to the caller.
 export async function signOutUser() {
   await signOut(auth)
@@ -41,8 +59,18 @@ const ERROR_MESSAGES: Record<string, string> = {
   "auth/weak-password": "Password is too weak. Use at least 6 characters.",
 }
 
+const LOGIN_ERROR_MESSAGE = "Invalid email or password. Please try again."
+
 // Map Firebase auth error codes to readable copy, with a generic fallback.
-export function authErrorMessage(error: unknown): string {
+// Login always shows one generic message regardless of the error code.
+export function authErrorMessage(
+  error: unknown,
+  variant: "signup" | "login" = "signup",
+): string {
+  if (variant === "login") {
+    return LOGIN_ERROR_MESSAGE
+  }
+
   const code =
     typeof error === "object" && error !== null && "code" in error
       ? String((error as { code: unknown }).code)

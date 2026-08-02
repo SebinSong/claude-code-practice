@@ -4,7 +4,7 @@ import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
-import { signUpWithCodename, authErrorMessage } from "@/lib/auth"
+import { signUpWithCodename, signInUser, authErrorMessage } from "@/lib/auth"
 import styles from "./AuthForm.module.css"
 
 type AuthVariant = "login" | "signup"
@@ -16,7 +16,6 @@ type AuthFormProps = {
 const VARIANT_CONFIG = {
   login: {
     submitLabel: "Log in",
-    consoleLabel: "login submit",
     passwordAutoComplete: "current-password",
     passwordMinLength: undefined,
     switchHref: "/signup",
@@ -25,7 +24,6 @@ const VARIANT_CONFIG = {
   },
   signup: {
     submitLabel: "Sign up",
-    consoleLabel: "signup submit",
     passwordAutoComplete: "new-password",
     passwordMinLength: 6,
     switchHref: "/login",
@@ -46,20 +44,18 @@ export default function AuthForm({ variant }: AuthFormProps) {
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
 
-    if (variant !== "signup") {
-      // Login wiring is out of scope — keep the existing placeholder behaviour.
-      console.log(config.consoleLabel, { email, password })
-      return
-    }
-
     setError("")
     setSubmitting(true)
     try {
-      const res = await signUpWithCodename(email, password)
-      console.log("signup success", res)
+      if (variant === "signup") {
+        const res = await signUpWithCodename(email, password)
+        console.log("signup success", res)
+      } else {
+        await signInUser(email, password)
+      }
       router.push("/heists")
     } catch (err) {
-      setError(authErrorMessage(err))
+      setError(authErrorMessage(err, variant))
     } finally {
       setSubmitting(false)
     }

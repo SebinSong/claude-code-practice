@@ -1,0 +1,9 @@
+@reference "../../app/globals.css";
+
+.wrapper {
+  @apply flex flex-col items-center justify-center min-h-lvh;
+}
+
+.loaderText {
+  @apply mt-4 text-base text-gray-600;
+}

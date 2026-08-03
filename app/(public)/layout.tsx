@@ -1,3 +1,7 @@
+"use client"
+
+import AuthGuard from "@/components/AuthGuard"
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -5,7 +9,13 @@ export default function RootLayout({
 }>) {
   return (
     <main className="public">
-      {children}
+      <AuthGuard
+        when="unauthenticated"
+        redirectTo="/heists"
+        exemptPaths={["/"]}
+      >
+        {children}
+      </AuthGuard>
     </main>
   )
 }

@@ -1,3 +1,4 @@
+import { Suspense } from "react"
 import AuthForm from "@/components/AuthForm"
 
 export default function LoginPage() {
@@ -5,7 +6,9 @@ export default function LoginPage() {
     <div className="center-content">
       <div className="form-content">
         <h1 className="form-title">Log in to Your Account</h1>
-        <AuthForm variant="login" />
+        <Suspense fallback={null}>
+          <AuthForm variant="login" />
+        </Suspense>
       </div>
     </div>
   )

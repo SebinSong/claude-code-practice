@@ -5,6 +5,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 // vi.mock is hoisted, so shared mock fns are declared via vi.hoisted.
 const mocks = vi.hoisted(() => ({
   push: vi.fn(),
+  useSearchParams: vi.fn(),
   signUpWithCodename: vi.fn(),
   signInUser: vi.fn(),
   authErrorMessage: vi.fn((_err: unknown, variant?: string) =>
@@ -16,6 +17,7 @@ const mocks = vi.hoisted(() => ({
 
 vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: mocks.push }),
+  useSearchParams: mocks.useSearchParams,
 }))
 
 vi.mock("@/lib/auth", () => ({
@@ -30,6 +32,7 @@ import AuthForm from "@/components/AuthForm"
 describe("AuthForm", () => {
   beforeEach(() => {
     vi.clearAllMocks()
+    mocks.useSearchParams.mockReturnValue(new URLSearchParams())
     mocks.signUpWithCodename.mockResolvedValue({})
     mocks.signInUser.mockResolvedValue({ user: { uid: "uid-123" } })
   })
@@ -211,6 +214,35 @@ describe("AuthForm", () => {
     expect(screen.getByRole("link", { name: /log in/i })).toHaveAttribute(
       "href",
       "/login",
+    )
+  })
+
+  it("redirects to the ?redirect= target on successful login instead of /heists", async () => {
+    const user = userEvent.setup()
+    mocks.useSearchParams.mockReturnValue(
+      new URLSearchParams("redirect=/heists/create"),
+    )
+    render(<AuthForm variant="login" />)
+
+    await user.type(
+      screen.getByRole("textbox", { name: /email/i }),
+      "thief@heist.io",
+    )
+    await user.type(screen.getByLabelText(/^password$/i), "secret123")
+    await user.click(screen.getByRole("button", { name: /log in/i }))
+
+    expect(mocks.push).toHaveBeenCalledWith("/heists/create")
+  })
+
+  it("preserves the ?redirect= param on the switch link", () => {
+    mocks.useSearchParams.mockReturnValue(
+      new URLSearchParams("redirect=/heists/create"),
+    )
+    render(<AuthForm variant="login" />)
+
+    expect(screen.getByRole("link", { name: /sign up/i })).toHaveAttribute(
+      "href",
+      "/signup?redirect=%2Fheists%2Fcreate",
     )
   })
 })

@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { useRouter } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { Eye, EyeOff } from "lucide-react"
 import { useState } from "react"
 import { signUpWithCodename, signInUser, authErrorMessage } from "@/lib/auth"
@@ -35,11 +35,16 @@ const VARIANT_CONFIG = {
 export default function AuthForm({ variant }: AuthFormProps) {
   const config = VARIANT_CONFIG[variant]
   const router = useRouter()
+  const searchParams = useSearchParams()
+  const redirectParam = searchParams.get("redirect")
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [showPassword, setShowPassword] = useState(false)
   const [error, setError] = useState("")
   const [submitting, setSubmitting] = useState(false)
+  const switchHref = redirectParam
+    ? `${config.switchHref}?redirect=${encodeURIComponent(redirectParam)}`
+    : config.switchHref
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -53,7 +58,7 @@ export default function AuthForm({ variant }: AuthFormProps) {
       } else {
         await signInUser(email, password)
       }
-      router.push("/heists")
+      router.push(redirectParam || "/heists")
     } catch (err) {
       setError(authErrorMessage(err, variant))
     } finally {
@@ -120,7 +125,7 @@ export default function AuthForm({ variant }: AuthFormProps) {
 
       <p className={styles.switchRow}>
         {config.switchPrompt}{" "}
-        <Link className={styles.switchLink} href={config.switchHref}>
+        <Link className={styles.switchLink} href={switchHref}>
           {config.switchCta}
         </Link>
       </p>

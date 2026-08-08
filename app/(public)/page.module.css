@@ -1,0 +1,130 @@
+@reference "../globals.css";
+
+.splash {
+  @apply mx-auto w-full max-w-6xl px-4 py-10;
+}
+
+/* hero */
+.hero {
+  @apply grid grid-cols-1 items-center gap-10 py-10 md:grid-cols-[1.1fr_0.9fr] md:gap-8 md:py-16;
+}
+
+.heroCopy {
+  @apply flex flex-col items-start text-left;
+}
+
+.eyebrow {
+  @apply mb-5 inline-flex items-center gap-2 rounded-full border border-primary/30 px-3 py-1 font-mono text-xs tracking-widest text-primary uppercase;
+}
+
+.liveDot {
+  @apply h-1.5 w-1.5 rounded-full bg-success;
+  animation: pulse 1.6s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .liveDot {
+    animation: none;
+  }
+}
+
+.heroLead {
+  @apply mt-2 max-w-md text-base;
+}
+
+.ctaRow {
+  @apply mt-8 flex flex-wrap items-center gap-5;
+}
+
+.registerBtn {
+  @apply inline-flex items-center gap-2 rounded-md px-5 py-3 font-semibold text-heading transition-transform;
+  background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+}
+.registerBtn:hover {
+  @apply scale-[1.03];
+}
+.registerBtn:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.loginLink {
+  @apply font-medium text-body transition-colors;
+}
+.loginLink:hover,
+.loginLink:focus-visible {
+  @apply text-secondary;
+}
+
+/* shared section heading */
+.sectionTitle {
+  @apply mb-8 font-mono text-xs tracking-[0.2em] text-body uppercase;
+}
+
+/* briefing */
+.briefing {
+  @apply border-t border-lighter py-14;
+}
+
+.briefingList {
+  @apply grid grid-cols-1 gap-8 md:grid-cols-3 md:gap-6;
+}
+
+.briefingItem {
+  @apply flex gap-4;
+}
+
+.briefingIndex {
+  @apply font-mono text-2xl font-semibold text-primary/50;
+}
+
+.briefingLabel {
+  @apply text-lg font-semibold text-heading;
+}
+
+.briefingDetail {
+  @apply mt-1 text-sm;
+}
+
+/* missions */
+.missions {
+  @apply border-t border-lighter py-14;
+}
+
+.missionGrid {
+  @apply grid grid-cols-1 gap-4 md:grid-cols-3;
+}
+
+.missionCard {
+  @apply rounded-lg border border-lighter bg-light px-5 py-6 transition-colors;
+}
+.missionCard:hover {
+  @apply border-primary/40;
+}
+
+.missionTitle {
+  @apply font-semibold text-heading;
+}
+
+.missionDetail {
+  @apply mt-2 text-sm;
+}
+
+/* final cta */
+.finalCta {
+  @apply flex flex-col items-center gap-5 border-t border-lighter py-16 text-center;
+}
+
+.finalCtaText {
+  @apply text-xl font-semibold text-heading;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}

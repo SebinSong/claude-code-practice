@@ -1,0 +1,32 @@
+@reference "../../app/globals.css";
+
+.clock {
+  @apply flex flex-col items-center gap-3 rounded-2xl border border-lighter bg-light px-8 py-10 shadow-2xl shadow-primary/5;
+}
+
+.clockLabel {
+  @apply font-mono text-[11px] tracking-[0.25em] text-body uppercase;
+}
+
+.readout {
+  @apply flex items-baseline gap-1 font-mono text-5xl font-semibold tabular-nums md:text-6xl;
+}
+
+.digits {
+  background: linear-gradient(120deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.colon {
+  @apply text-primary/40;
+}
+
+.unitsRow {
+  @apply flex gap-6 font-mono text-[10px] tracking-[0.3em] text-body uppercase;
+}
+
+.unitsRow span {
+  @apply inline-block w-14 text-center;
+}

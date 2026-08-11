@@ -2,9 +2,18 @@ rules_version = '2'
 
 service cloud.firestore {
   match /databases/{database}/documents {
-    // A user may read/write only their own profile doc.
+    // Any authenticated user may read profiles (needed to list teammates);
+    // only the owner may write their own profile doc.
     match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
+      allow read: if request.auth != null;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // Any authenticated user may read heists; creation is only allowed when
+    // the document's own createdBy matches the caller (prevents spoofing).
+    match /heists/{heistId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.createdBy == request.auth.uid;
     }
   }
 }

@@ -1,0 +1,42 @@
+@reference "../../app/globals.css";
+
+.form {
+  @apply mx-auto mt-6 flex w-full max-w-sm flex-col gap-4;
+}
+
+.field {
+  @apply flex flex-col gap-1;
+}
+
+.label {
+  @apply text-sm font-medium text-body;
+}
+
+.input {
+  @apply w-full rounded-md border border-light bg-lighter px-3 py-2 text-heading;
+}
+.input:focus {
+  @apply border-primary outline-none;
+}
+
+.textarea {
+  @apply w-full resize-none rounded-md border border-light bg-lighter px-3 py-2 text-heading;
+}
+.textarea:focus {
+  @apply border-primary outline-none;
+}
+
+.error {
+  @apply text-center text-sm text-error;
+}
+
+.empty {
+  @apply mt-6 text-center text-sm text-body;
+}
+
+.submit {
+  @apply mt-2 inline-flex w-full items-center justify-center gap-2 text-center;
+}
+.submit:disabled {
+  @apply cursor-not-allowed opacity-50;
+}

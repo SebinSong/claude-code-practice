@@ -53,6 +53,14 @@ describe("Navbar", () => {
     ).not.toBeInTheDocument()
   })
 
+  it("does not render the avatar when logged out", () => {
+    render(<Navbar />)
+
+    expect(
+      screen.queryByRole("img", { name: /thief/i }),
+    ).not.toBeInTheDocument()
+  })
+
   it("renders the logout button when logged in", () => {
     mocks.useUser.mockReturnValue({
       user: { uid: "uid-123", email: "thief@heist.io", displayName: "Thief" },
@@ -61,6 +69,17 @@ describe("Navbar", () => {
     render(<Navbar />)
 
     expect(screen.getByRole("button", { name: /log out/i })).toBeInTheDocument()
+  })
+
+  it("renders the avatar and codename when logged in", () => {
+    mocks.useUser.mockReturnValue({
+      user: { uid: "uid-123", email: "thief@heist.io", displayName: "Thief" },
+      loading: false,
+    })
+    render(<Navbar />)
+
+    expect(screen.getByRole("img", { name: /thief/i })).toBeInTheDocument()
+    expect(screen.getByText("Thief")).toBeInTheDocument()
   })
 
   it("signs out and redirects to /login on click", async () => {

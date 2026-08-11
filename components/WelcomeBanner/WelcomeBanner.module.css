@@ -1,0 +1,12 @@
+@reference "../../app/globals.css";
+
+.heading {
+  @apply mt-12 mb-6 text-3xl font-bold;
+}
+
+.name {
+  background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}

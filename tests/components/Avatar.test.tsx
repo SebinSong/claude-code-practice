@@ -26,4 +26,11 @@ describe("Avatar", () => {
     const avatar = screen.getByRole("img", { name: /alice/i })
     expect(avatar).toHaveTextContent("A")
   })
+
+  it("renders correctly with the sm size variant", () => {
+    render(<Avatar name="Alice" size="sm" />)
+
+    const avatar = screen.getByRole("img", { name: /alice/i })
+    expect(avatar).toHaveTextContent("A")
+  })
 })

@@ -2,6 +2,7 @@ import styles from "./Avatar.module.css"
 
 interface AvatarProps {
   name: string
+  size?: "sm" | "md"
 }
 
 function getInitials(name: string): string {
@@ -12,9 +13,12 @@ function getInitials(name: string): string {
   return name.charAt(0).toUpperCase()
 }
 
-export default function Avatar({ name }: AvatarProps) {
+export default function Avatar({ name, size = "md" }: AvatarProps) {
+  const className =
+    size === "sm" ? `${styles.avatar} ${styles.sm}` : styles.avatar
+
   return (
-    <div className={styles.avatar} role="img" aria-label={name}>
+    <div className={className} role="img" aria-label={name}>
       {getInitials(name)}
     </div>
   )

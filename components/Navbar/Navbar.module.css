@@ -28,6 +28,13 @@ svg.logo {
   @apply flex items-center gap-3;
 }
 
+.profile {
+  @apply inline-flex items-center gap-2;
+}
+.profileName {
+  @apply text-sm font-medium text-body;
+}
+
 .logoutBtn {
   @apply inline-flex items-center gap-2;
 }

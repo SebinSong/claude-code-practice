@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { signOutUser } from "@/lib/auth"
 import { useUser } from "@/lib/auth/auth-context"
+import Avatar from "@/components/Avatar"
 import styles from "./Navbar.module.css"
 
 export default function Navbar() {
@@ -38,6 +39,14 @@ export default function Navbar() {
           <div>Tiny missions. Big office mischief.</div>
         </header>
         <ul>
+          {!loading && user && user.displayName && (
+            <li>
+              <div className={styles.profile}>
+                <Avatar name={user.displayName} size="sm" />
+                <span className={styles.profileName}>{user.displayName}</span>
+              </div>
+            </li>
+          )}
           <li>
             <Link href="/heists/create" className={styles.createBtn}>
               <Plus size={16} strokeWidth={2.5} />

@@ -4,3 +4,7 @@
   @apply inline-flex items-center justify-center w-12 h-12 rounded-full text-heading font-semibold text-base select-none uppercase;
   background: linear-gradient(135deg, var(--color-primary), var(--color-secondary));
 }
+
+.avatar.sm {
+  @apply w-8 h-8 text-sm;
+}
